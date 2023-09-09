@@ -2,14 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class NodeConnection : MonoBehaviour
 {
     private LineRenderer _lineRenderer;
-    [SerializeField] private Canvas _costText;
+    [SerializeField] private TMP_InputField _costInputField;
+    public int Cost => int.Parse(_costInputField.text);
 
     private void Awake() {
         _lineRenderer = transform.GetComponentInChildren<LineRenderer>();
+    }
+
+    private void Start() {
+        _costInputField.onValueChanged.AddListener(OnCostChanged);
     }
 
     public void SetPosition(Vector3 position, int index) => _lineRenderer.SetPosition(index, position);
@@ -17,10 +23,10 @@ public class NodeConnection : MonoBehaviour
     public void SetCostPosition(){
         Vector3 position = (_lineRenderer.GetPosition(0) + _lineRenderer.GetPosition(1)) / 2;
         position.z = 0;
-        _costText.transform.position = position;
+        transform.position = position;
     }
 
-    void Update(){
-
+    private void OnCostChanged(string value){
+        Debug.Log("Cost changed to: " + value);
     }
 }

@@ -22,20 +22,31 @@ public class PlayerInput : MonoBehaviour
         if(Input.GetMouseButtonDown(0)){
             RaycastHit2D hit = Physics2D.Raycast(GetMousePosition(), Vector2.zero);
 
-            if(hit.collider != null && _activeNodeConnection == null){
+            // If we hit a node and we don't have a current connection, create a connection
+            // If we hit a node and we have a current connection, snap the line renderer to the node
+            // If we don't hit a node, create a node
+            // If we hit a connection, do nothing
+
+            if(hit.collider == null){
+                CreateNode(GetMousePosition());
+                return;
+            }
+
+
+            if(hit.collider.TryGetComponent<NodeConnection>(out NodeConnection nodeConnection)){
+                return; // We are currently trying to put something in an input field so don't do anything
+            }
+            else if(_activeNodeConnection == null){
                 // Create a connection between two nodes
-                NodeConnection nodeConnection = Instantiate(_nodeConnectionPrefab, _nodeParent);
-                _activeNodeConnection = nodeConnection;
+                NodeConnection newNodeConnection = Instantiate(_nodeConnectionPrefab, _nodeParent);
+                _activeNodeConnection = newNodeConnection;
                 _activeNodeConnection.SetPosition(hit.collider.transform.position, 0);
             }
-            else if(hit.collider != null && _activeNodeConnection != null){
+            else if(_activeNodeConnection != null){
                 // Snap the line renderer to the node
                 _activeNodeConnection.SetPosition(hit.collider.transform.position, 1);
                 _activeNodeConnection.SetCostPosition();
                 _activeNodeConnection = null;
-            }
-            else{
-                CreateNode(GetMousePosition());
             }
             
         }
