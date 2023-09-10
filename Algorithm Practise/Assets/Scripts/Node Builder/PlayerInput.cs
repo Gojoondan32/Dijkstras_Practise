@@ -19,7 +19,7 @@ public class PlayerInput : MonoBehaviour
     {
         // If space is empty, create a node
         // If space is not empty, use the line renderer to create a connection between two nodes
-        if(Input.GetMouseButtonDown(0)){
+        if(Input.GetMouseButtonDown(1)){
             RaycastHit2D hit = Physics2D.Raycast(GetMousePosition(), Vector2.zero);
 
             // If we hit a node and we don't have a current connection, create a connection
