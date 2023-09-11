@@ -5,6 +5,7 @@ using UnityEngine;
 public class Node 
 {
     public List<(Node node, int connectionValue)> connections;
+    public Node prev;
     public int estimate;
     public bool explored;
     public string name;
@@ -13,6 +14,7 @@ public class Node
     {
         //this.connections = connections;
         connections = new List<(Node node, int connectionValue)>();
+        prev = null;
         this.estimate = estimate;
         explored = false;
         this.name = name;
