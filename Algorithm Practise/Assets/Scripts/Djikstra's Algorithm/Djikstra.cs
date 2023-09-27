@@ -17,8 +17,8 @@ public class Djikstra : MonoBehaviour
     } 
 
     private void Start() {
-        CreateWeigtedGraph();
-        StartCoroutine(BeginAlgoritm());
+        //CreateWeigtedGraph();
+        //StartCoroutine(BeginAlgoritm());
     }
 
     private void CreateWeigtedGraph(){

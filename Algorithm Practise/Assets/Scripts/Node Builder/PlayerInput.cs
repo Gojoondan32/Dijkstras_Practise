@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerInput : MonoBehaviour
 {
     [SerializeField] private Transform _nodeParent;
-    [SerializeField] private GameObject _nodePrefab;
+    [SerializeField] private NodeObject _nodePrefab;
     [SerializeField] private NodeConnection _nodeConnectionPrefab;   
 
     private NodeConnection _activeNodeConnection;
