@@ -62,5 +62,6 @@ public class PlayerInput : MonoBehaviour
 
     private void CreateNode(Vector3 position){
         Instantiate(_nodePrefab, position, Quaternion.identity, _nodeParent);
+        
     }
 }

@@ -6,11 +6,11 @@ using TMPro;
 public class NodeObject : MonoBehaviour
 {
     private Node node;
-    private TextMeshProUGUI estimateText;
+    [SerializeField] private TextMeshProUGUI estimateText;
 
     private void Awake() {
         node = new Node(int.MaxValue, gameObject.name);
-        estimateText.text = node.estimate.ToString();
+        estimateText.text = node.estimate.ToInfinity();
     }
 
     public void SetEstimate(int estimate){

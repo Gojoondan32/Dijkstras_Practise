@@ -20,4 +20,9 @@ public class Node
         this.name = name;
     }
 
+    public override string ToString()
+    {
+        return estimate == int.MaxValue ? "∞" : base.ToString();
+    }
+
 }
