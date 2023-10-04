@@ -987,7 +987,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _nodeParent: {fileID: 1909447020}
-  _nodePrefab: {fileID: 7122357887734583401, guid: 1d33fa7605fab4f4c9e4be5fbc77b711, type: 3}
+  _nodePrefab: {fileID: 8147098239002745582, guid: 1d33fa7605fab4f4c9e4be5fbc77b711, type: 3}
   _nodeConnectionPrefab: {fileID: 2906317595456723908, guid: 7d833e6d7abb59147a1a884e4acdf41e, type: 3}
 --- !u!1 &1852456697
 GameObject:

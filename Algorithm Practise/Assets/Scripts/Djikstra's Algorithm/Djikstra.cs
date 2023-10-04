@@ -29,14 +29,14 @@ public class Djikstra : MonoBehaviour
 
         //! This is for testing purposes
         //Debug.Log($"Start: {start}, Node1: {node1}, Node2: {node2}, End: {end}");
-        start.connections.Add((node1, 2));
-        start.connections.Add((node2, 3));
+        start.AddConnection(node1, 2);
+        start.AddConnection(node2, 3);
 
-        node1.connections.Add((start, 2));
-        node1.connections.Add((end, 3));
+        node1.AddConnection(start, 2);
+        node1.AddConnection(end, 3);
 
-        node2.connections.Add((start, 3));
-        node2.connections.Add((end, 1));
+        node2.AddConnection(start, 3);
+        node2.AddConnection(end, 1);
     }
 
     private IEnumerator BeginAlgoritm(){
@@ -54,7 +54,7 @@ public class Djikstra : MonoBehaviour
     private void ExploreConnections(){
         Node nextNode = new Node(int.MaxValue, "Temp");
         //current = current.connections[0].node;
-        foreach((Node node, int connectionValue) in current.connections){
+        foreach((Node node, int connectionValue) in current.Connections){
             //Debug.Log($"Exploring {node.name}, explored status: {node.explored}");
             // Update estimates
             int updatedEstimate = current.estimate + connectionValue;

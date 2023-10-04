@@ -10,15 +10,15 @@ public class NodeObject : MonoBehaviour
 
     private void Awake() {
         node = new Node(int.MaxValue, gameObject.name);
-        estimateText.text = node.estimate.ToInfinity();
+        estimateText.text = node.estimate.ToInfinity(); // Converts the int.MaxValue to the infinity symbol
     }
 
     public void SetEstimate(int estimate){
         node.estimate = estimate;
-        estimateText.text = node.estimate.ToString();
+        estimateText.text = node.estimate.ToInfinity();
     }
 
     public void AddConnection(NodeObject nodeObject, int connectionValue){
-        node.connections.Add((nodeObject.node, connectionValue));
+        node.AddConnection(nodeObject.node, connectionValue);
     }
 }

@@ -26,6 +26,10 @@ public class NodeConnection : MonoBehaviour
         transform.position = position;
     }
 
+    //! This is for testing purposes
+    public void SetConnectionCost(int value) => _costInputField.text = value.ToString(); 
+    //! -----------------------------
+    
     private void OnCostChanged(string value){
         Debug.Log("Cost changed to: " + value);
     }

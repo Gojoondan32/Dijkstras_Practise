@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class Node 
 {
-    public List<(Node node, int connectionValue)> connections;
+    private List<(Node node, int connectionValue)> connections;
+    public List<(Node node, int connectionValue)> Connections { get { return connections; }}
+
     public Node prev;
     public int estimate;
     public bool explored;
@@ -19,6 +21,8 @@ public class Node
         explored = false;
         this.name = name;
     }
+
+    public void AddConnection(Node node, int connectionValue) => connections.Add((node, connectionValue));
 
     public override string ToString()
     {
