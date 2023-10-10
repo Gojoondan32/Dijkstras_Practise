@@ -7,8 +7,10 @@ using System.Linq;
 
 public class Djikstra : MonoBehaviour
 {
-    private Node start;
-    private Node end;
+    private Node startNode;
+    public Node StartNode {private get{return startNode;} set{startNode = value;}}
+    private Node endNode;
+    public Node EndNode {private get{return endNode;} set{endNode = value;}}
     private Node current;
     private Dictionary<Node, int> unexploredNodes;
 
@@ -21,33 +23,35 @@ public class Djikstra : MonoBehaviour
         //StartCoroutine(BeginAlgoritm());
     }
 
+    /*
     private void CreateWeigtedGraph(){
-        start = new Node(0, "Start");
+        startNode = new Node(0, "Start");
         Node node1 = new Node(int.MaxValue, "Node1");
         Node node2 = new Node(int.MaxValue, "Node2");
-        end = new Node(int.MaxValue, "End");
+        endNode = new Node(int.MaxValue, "End");
 
         //! This is for testing purposes
         //Debug.Log($"Start: {start}, Node1: {node1}, Node2: {node2}, End: {end}");
-        start.AddConnection(node1, 2);
-        start.AddConnection(node2, 3);
+        startNode.AddConnection(node1, 2);
+        startNode.AddConnection(node2, 3);
 
-        node1.AddConnection(start, 2);
-        node1.AddConnection(end, 3);
+        node1.AddConnection(startNode, 2);
+        node1.AddConnection(endNode, 3);
 
-        node2.AddConnection(start, 3);
-        node2.AddConnection(end, 1);
+        node2.AddConnection(startNode, 3);
+        node2.AddConnection(endNode, 1);
     }
-
+    */
     // This is a passthrough function so a button component can call the coroutine
     public void BeginAlgorithm(){
+        GameStateManager.Instance.SetGameState(GameState.Djikstra);
         StartCoroutine(BeginAlgoritm());
     }
 
     private IEnumerator BeginAlgoritm(){
-        current = start;
+        current = startNode;
         current.explored = true; // The start has already been explored since we start there
-        while(!end.explored){
+        while(!endNode.explored){
             //Debug.Log($"Exploring {current.name}");
             ExploreConnections();
             yield return new WaitForSeconds(1f);
@@ -57,7 +61,7 @@ public class Djikstra : MonoBehaviour
     }
 
     private void ExploreConnections(){
-        Node nextNode = new Node(int.MaxValue, "Temp");
+        Node nextNode = new Node(null, int.MaxValue, "Temp");
         //current = current.connections[0].node;
         foreach((Node node, int connectionValue) in current.Connections){
             //Debug.Log($"Exploring {node.name}, explored status: {node.explored}");
@@ -88,10 +92,11 @@ public class Djikstra : MonoBehaviour
     }
 
     private IEnumerator DisplayPath(){
-        Node current = end;
+        Node current = endNode;
         //Debug.Log(start.prev);
         while(current != null){
             Debug.Log(current.name); // This will be backwards
+            current.NodeObject.SetColor(Color.green);
             current = current.prev;
             yield return new WaitForSeconds(0.1f);
         }

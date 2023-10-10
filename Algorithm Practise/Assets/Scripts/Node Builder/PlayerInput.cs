@@ -11,17 +11,17 @@ public class PlayerInput : MonoBehaviour
     [SerializeField] private Transform _nodeParent;
     [SerializeField] private NodeObject _nodePrefab;
     [SerializeField] private NodeConnection _nodeConnectionPrefab;   
-    private bool _isBuilding;
+    private bool _startNodeSelected;
 
     private NodeConnection _activeNodeConnection;
     private NodeObject _node1;
     private NodeObject _node2;
     
     private void Awake() {
-        GameStateManager.Instance.OnGameStateChange += GameStateChanged;
         _activeNodeConnection = null;
         _node1 = null;
         _node2 = null;
+        _startNodeSelected = false;
     }
 
     // Update is called once per frame
@@ -83,7 +83,20 @@ public class PlayerInput : MonoBehaviour
     private void PickNodePhase(RaycastHit2D hit){
         if(hit.collider == null) return;
 
-        
+        if(hit.collider.TryGetComponent<NodeObject>(out NodeObject node)){
+            if(!_startNodeSelected){
+                // Set the start node
+                node.SetColor(Color.blue);
+                _djikstra.StartNode = node.Node;
+                _startNodeSelected = true;
+            }
+            else{
+                // Set the end node
+                node.SetColor(Color.red);
+                _djikstra.EndNode = node.Node;
+            }
+            
+        }
     }
 
     private Vector3 GetMousePosition(){
@@ -109,18 +122,6 @@ public class PlayerInput : MonoBehaviour
         _activeNodeConnection = null;
         _node1 = null;
         _node2 = null;
-
+        _startNodeSelected = false;
     }
-
-
-    #region Event Subscriptions
-    private void GameStateChanged(GameState gameState){
-        if(gameState == GameState.NodeBuilder) _isBuilding = true;
-        else _isBuilding = false;
-    }
-
-    private void OnDestroy(){
-        GameStateManager.Instance.OnGameStateChange -= GameStateChanged;
-    }
-    #endregion
 }

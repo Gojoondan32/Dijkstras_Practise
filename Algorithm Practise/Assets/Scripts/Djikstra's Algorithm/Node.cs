@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Node 
 {
+    private NodeObject nodeObject; // This is required so we can change the visual representation of this node
+    public NodeObject NodeObject { get { return nodeObject; } }
+
     private List<(Node node, int connectionValue)> connections;
     public List<(Node node, int connectionValue)> Connections { get { return connections; }}
 
@@ -12,8 +15,9 @@ public class Node
     public bool explored;
     public string name;
 
-    public Node(int estimate, string name)
+    public Node(NodeObject nodeObject, int estimate, string name)
     {
+        this.nodeObject = nodeObject;
         //this.connections = connections;
         connections = new List<(Node node, int connectionValue)>();
         prev = null;

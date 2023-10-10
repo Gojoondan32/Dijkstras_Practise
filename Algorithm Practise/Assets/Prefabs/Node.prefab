@@ -299,7 +299,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6b6c752af7b8f846aa063bc06714229, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  estimateText: {fileID: 1446426247166401332}
+  _estimateText: {fileID: 1446426247166401332}
+  _spriteRenderer: {fileID: 5079046521629624679}
 --- !u!1 &7708353329755638765
 GameObject:
   m_ObjectHideFlags: 0
