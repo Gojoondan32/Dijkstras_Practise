@@ -39,6 +39,11 @@ public class Djikstra : MonoBehaviour
         node2.AddConnection(end, 1);
     }
 
+    // This is a passthrough function so a button component can call the coroutine
+    public void BeginAlgorithm(){
+        StartCoroutine(BeginAlgoritm());
+    }
+
     private IEnumerator BeginAlgoritm(){
         current = start;
         current.explored = true; // The start has already been explored since we start there

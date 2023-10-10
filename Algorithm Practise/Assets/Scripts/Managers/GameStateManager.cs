@@ -2,6 +2,7 @@ public enum GameState
 {
     None,
     NodeBuilder,
+    NodePicker,
     Djikstra
 }
 

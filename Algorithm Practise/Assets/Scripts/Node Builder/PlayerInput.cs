@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class PlayerInput : MonoBehaviour
 {
+    #region Class References
+    [SerializeField] private Djikstra _djikstra; 
+    #endregion
     [SerializeField] private Transform _nodeParent;
     [SerializeField] private NodeObject _nodePrefab;
     [SerializeField] private NodeConnection _nodeConnectionPrefab;   
@@ -24,7 +27,6 @@ public class PlayerInput : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(!_isBuilding) return;
         // If space is empty, create a node
         // If space is not empty, use the line renderer to create a connection between two nodes
         if(Input.GetMouseButtonDown(1)){
@@ -35,33 +37,53 @@ public class PlayerInput : MonoBehaviour
             // If we don't hit a node, create a node
             // If we hit a connection, do nothing
 
-            if(hit.collider == null){
-                CreateNode(GetMousePosition());
-                return;
+            if(GameStateManager.Instance.CurrentGameState == GameState.NodeBuilder){
+                BuildNodePhase(hit); // We are trying to build the weighted graph of nodes 
             }
-
-            if(hit.collider.TryGetComponent<NodeConnection>(out NodeConnection nodeConnection)){
-                return; // We are currently trying to put something in an input field so don't do anything
+            else if(GameStateManager.Instance.CurrentGameState == GameState.NodePicker){
+                PickNodePhase(hit); // We are trying to pick the start and end nodes
             }
-            else if(_activeNodeConnection == null){
-                // Create a connection between two nodes
-                // Store the current node hit 
-                _node1 = hit.collider.GetComponent<NodeObject>();
-                NodeConnection newNodeConnection = Instantiate(_nodeConnectionPrefab, _nodeParent);
-                _activeNodeConnection = newNodeConnection;
-                _activeNodeConnection.SetPosition(hit.collider.transform.position, 0);
-            }
-            else if(_activeNodeConnection != null){
-                // Snap the line renderer to the node
-                _node2 = hit.collider.GetComponent<NodeObject>();
-                _activeNodeConnection.SetPosition(hit.collider.transform.position, 1);
-                _activeNodeConnection.SetCostPosition();
-                CreateConnection();
-            }
-            
         }
 
+        // This makes the line renderer follow the mouse when we are trying to build a connection
         _activeNodeConnection?.SetPosition(GetMousePosition(), 1);
+    }
+
+    private void BuildNodePhase(RaycastHit2D hit){
+        // We need to create a node if the player clicks on an empty space
+        if (hit.collider == null){
+            CreateNode(GetMousePosition());
+            return;
+        }
+
+        //! This might be redundant now that I have switched from using the primary mouse button to the secondary mouse button
+        if (hit.collider.TryGetComponent<NodeConnection>(out NodeConnection nodeConnection))
+        {
+            return; // We are currently trying to put something in an input field so don't do anything
+        }
+        // We have hit a node and we don't have a current connection
+        else if (_activeNodeConnection == null) 
+        {
+            _node1 = hit.collider.GetComponent<NodeObject>();
+            NodeConnection newNodeConnection = Instantiate(_nodeConnectionPrefab, _nodeParent);
+            _activeNodeConnection = newNodeConnection;
+            _activeNodeConnection.SetPosition(hit.collider.transform.position, 0);
+        }
+        // We have hit a node and we have a current connection
+        else if (_activeNodeConnection != null)
+        {
+            // Snap the line renderer to the node
+            _node2 = hit.collider.GetComponent<NodeObject>();
+            _activeNodeConnection.SetPosition(hit.collider.transform.position, 1);
+            _activeNodeConnection.SetCostPosition();
+            CreateConnection();
+        }
+    }
+
+    private void PickNodePhase(RaycastHit2D hit){
+        if(hit.collider == null) return;
+
+        
     }
 
     private Vector3 GetMousePosition(){
@@ -90,8 +112,15 @@ public class PlayerInput : MonoBehaviour
 
     }
 
+
+    #region Event Subscriptions
     private void GameStateChanged(GameState gameState){
         if(gameState == GameState.NodeBuilder) _isBuilding = true;
         else _isBuilding = false;
     }
+
+    private void OnDestroy(){
+        GameStateManager.Instance.OnGameStateChange -= GameStateChanged;
+    }
+    #endregion
 }
